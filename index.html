@@ -3,214 +3,152 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WrathfulDiety Terminal</title>
+<title>RudraForge Terminal</title>
 <style>
-/* Matrix background */
-body {
-  margin: 0;
-  overflow: hidden;
-  background: black;
-  font-family: monospace;
-  color: #00ff9c;
-}
+  /* CRT Terminal base */
+  body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    line-height: 1.2em;
+    overflow: hidden;
+  }
 
-/* Terminal container */
-.terminal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 900px;
-  width: 90%;
-  padding: 20px;
-  background: rgba(0,0,0,0.85);
-  box-shadow: 0 0 20px #00ff9c;
-  border-radius: 8px;
-  z-index: 10;
-}
+  /* Scanlines */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      rgba(0,255,0,0.05) 0 1px,
+      transparent 1px 2px
+    );
+    z-index: 2;
+  }
 
-h1 {
-  color: #00ff9c;
-  text-shadow: 0 0 10px #00ff9c;
-}
+  /* Cursor */
+  .cursor {
+    display: inline-block;
+    width: 10px;
+    background-color: #0f0;
+    margin-left: 2px;
+    animation: blink 1s step-start infinite;
+  }
 
-#output {
-  margin-top: 20px;
-  white-space: pre-line;
-  min-height: 200px;
-}
+  @keyframes blink {
+    50% { background-color: transparent; }
+  }
 
-.input-line {
-  display: flex;
-  margin-top: 10px;
-}
+  /* Terminal container */
+  #terminal {
+    padding: 20px;
+    white-space: pre-wrap;
+    height: 100vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
 
-.prompt {
-  margin-right: 10px;
-}
+  /* Command links */
+  .cmd-link {
+    color: #0f0;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 
-input {
-  background: black;
-  border: none;
-  color: #00ff9c;
-  font-family: monospace;
-  font-size: 16px;
-  outline: none;
-  width: 100%;
-}
-
-/* Links inside output */
-a {
-  color: #00ff9c;
-  text-decoration: underline;
-}
+  .cmd-link:hover {
+    color: #aff;
+  }
 
 </style>
 </head>
 <body>
-
-<canvas id="matrix"></canvas>
-
-<div class="terminal">
-  <h1>WrathfulDiety Security Terminal</h1>
-  <div>Type <b>help</b> to see available commands</div>
-  <div id="output"></div>
-  <div class="input-line">
-    <div class="prompt">></div>
-    <input id="command" autofocus autocomplete="off">
-  </div>
-</div>
-
+<div id="terminal"></div>
 <script>
-// Boot animation
-const output = document.getElementById("output");
-function print(text, delay=0) {
-  setTimeout(() => { output.innerHTML += text + "\n\n"; }, delay);
+// Boot sequence lines
+const bootLines = [
+  "Initializing NASA Terminal v1.9...",
+  "Loading telemetry modules...",
+  "Running pre-flight security checks...",
+  "Encrypting comms... [OK]",
+  "Loading user profile: WrathfulDiety",
+  "Mission logs synchronized",
+  "Pentesting suite initialized...",
+  "System ready. Welcome, Commander."
+];
+
+// ASCII banner for fun
+const banner = `
+██████╗ ██╗    ██╗██████╗ ██████╗  █████╗ ███████╗███████╗
+██╔══██╗██║    ██║██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝
+██████╔╝██║ █╗ ██║██████╔╝██████╔╝███████║███████╗█████╗  
+██╔═══╝ ██║███╗██║██╔═══╝ ██╔═══╝ ██╔══██║╚════██║██╔══╝  
+██║     ╚███╔███╔╝██║     ██║     ██║  ██║███████║███████╗
+╚═╝      ╚══╝╚══╝ ╚═╝     ╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝
+`;
+
+const terminal = document.getElementById("terminal");
+let lineIndex = 0;
+
+// Print boot sequence line by line
+function typeLine(text, callback) {
+  let i = 0;
+  const interval = setInterval(() => {
+    terminal.innerHTML += text.charAt(i);
+    i++;
+    terminal.scrollTop = terminal.scrollHeight;
+    if (i === text.length) {
+      clearInterval(interval);
+      terminal.innerHTML += "\n";
+      callback();
+    }
+  }, 40);
 }
 
-function bootSequence() {
-  const lines = [
-    "Initializing security terminal...",
-    "Loading vulnerability database...",
-    "Loading tools...",
-    "Access granted.",
-    "Welcome, WrathfulDiety!"
-  ];
-  lines.forEach((line, i) => print(line, i*800));
+// Sequentially print lines
+function bootSequence(index) {
+  if(index < bootLines.length) {
+    typeLine(bootLines[index], () => bootSequence(index + 1));
+  } else {
+    typeLine(banner + "\n\n", initCommands);
+  }
 }
-
-bootSequence();
 
 // Commands
-const input = document.getElementById("command");
+const commands = [
+  {label: "WHOAMI", action: "https://github.com/wrathfulDiety"},
+  {label: "TOOLS", action: "https://wrathfuldiety.github.io/RudraForge/tools.html"},
+  {label: "CVE", action: "https://www.cve.org/Search?search=CVE-2025-52357"},
+  {label: "BLOG", action: "https://hasanka-amarasinghe.medium.com/"},
+];
 
-function run(cmd) {
-  cmd = cmd.toLowerCase();
-
-  if(cmd==="help") {
-    print(`Available commands:
-about      - about the researcher
-whoami     - your info
-tools      - security tools
-cve        - vulnerability research
-blog       - medium articles
-contact    - contact info
-clear      - clear terminal`);
-  }
-
-  else if(cmd==="about" || cmd==="whoami") {
-    print(`Cybersecurity Engineer from Sri Lanka.
-Specializing in:
-• Penetration Testing
-• Application Security
-• Red Team Operations
-• Bug Bounty Hunting
-
-Focus areas include web application security and vulnerability research.`);
-  }
-
-  else if(cmd==="tools") {
-    print(`Security Tools:
-• RudraForge - Country-specific username/email generator for pentesting
-Launch: https://wrathfuldiety.github.io/RudraForge/`);
-  }
-
-  else if(cmd==="cve") {
-    print(`Published CVEs:
-• CVE-2025-52357 - Reflected XSS in FiberHome FD602GW-DX-R410 router
-• CVE-2025-56311 - CSRF vulnerability allowing remote reboot
-More details: https://www.cve.org/`);
-  }
-
-  else if(cmd==="blog") {
-    print(`Security Articles:
-https://hasanka-amarasinghe.medium.com`);
-  }
-
-  else if(cmd==="contact") {
-    print(`LinkedIn:
-https://linkedin.com/in/hasanka-amarasinghe`);
-  }
-
-  else if(cmd==="clear") {
-    output.innerHTML = "";
-  }
-
-  else if(cmd==="scan") {
-    print(`Simulated scan results:
-• Open ports: 22, 80, 443
-• Web app vulnerabilities: XSS, SSRF
-• Tools ready for exploitation.`);
-  }
-
-  else{
-    print("Command not found. Type 'help'.");
-  }
+// Print interactive commands
+function initCommands() {
+  terminal.innerHTML += "Available Commands:\n";
+  commands.forEach(cmd => {
+    terminal.innerHTML += `[${cmd.label}] `;
+  });
+  terminal.innerHTML += "\n\nClick command to open link:\n";
+  // Create clickable commands
+  commands.forEach(cmd => {
+    const span = document.createElement("span");
+    span.className = "cmd-link";
+    span.textContent = `[${cmd.label}] `;
+    span.onclick = () => window.open(cmd.action, "_blank");
+    terminal.appendChild(span);
+  });
+  const cursor = document.createElement("span");
+  cursor.className = "cursor";
+  terminal.appendChild(cursor);
 }
 
-input.addEventListener("keydown", function(e){
-  if(e.key==="Enter"){
-    let cmd = input.value;
-    print("> " + cmd);
-    run(cmd);
-    input.value="";
-    window.scrollTo(0, document.body.scrollHeight);
-  }
-});
+// Start boot
+bootSequence(0);
 
-// Matrix background effect
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()".split("");
-const fontSize = 16;
-const columns = Math.floor(width / fontSize);
-const drops = Array(columns).fill(1);
-
-function draw() {
-  ctx.fillStyle = "rgba(0,0,0,0.05)";
-  ctx.fillRect(0,0,width,height);
-  ctx.fillStyle = "#00ff9c";
-  ctx.font = fontSize + "px monospace";
-
-  for(let i=0;i<drops.length;i++){
-    const text = letters[Math.floor(Math.random()*letters.length)];
-    ctx.fillText(text, i*fontSize, drops[i]*fontSize);
-    if(drops[i]*fontSize>height && Math.random()>0.975){
-      drops[i] = 0;
-    }
-    drops[i]++;
-  }
-}
-
-setInterval(draw, 50);
-
-window.addEventListener("resize", () => {
-  width = canvas.width = window.innerWidth;
-  height = canvas.height = window.innerHeight;
-});
 </script>
-
 </body>
 </html>
