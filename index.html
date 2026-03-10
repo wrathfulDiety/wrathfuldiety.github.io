@@ -1,199 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anonymous Terminal Announcement</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Anonymous Announcement</title>
+<meta name="color-scheme" content="dark">
 <style>
-/* Basic Body & CRT Look */
-body {
-  margin: 0;
-  padding: 0;
-  background: black;
-  color: #00ff00;
-  font-family: 'Courier New', monospace;
-  font-size: 16px;
-  overflow: hidden;
-  text-shadow: 0 0 2px #0f0, 0 0 5px #0f0;
-  position: relative;
-}
+  /* ----- Base: CRT terminal vibe ----- */
+  :root {
+    --green: #00ff88;         /* Softer neon for readability */
+    --green-strong: #00ff00;  /* Accent neon */
+    --bg: #000000;
+    --card-bg: rgba(0, 0, 0, 0.65);
+    --border: rgba(0, 255, 136, 0.25);
+    --shadow: 0 0 12px rgba(0,255,136,0.15), 0 0 40px rgba(0,255,136,0.08);
+  }
 
-/* Background Guy Fawkes Mask */
-#mask {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 900px;
-  height: auto;
-  transform: translate(-50%, -50%);
-  opacity: 0.08;
-  pointer-events: none;
-  mix-blend-mode: lighten;
-  animation: maskFlicker 4s infinite;
-}
+  html, body {
+    height: 100%;
+  }
 
-@keyframes maskFlicker {
-  0%,50%,100% { opacity: 0.08; }
-  25% { opacity: 0.12; }
-  75% { opacity: 0.05; }
-}
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--green);
+    font-family: "Courier New", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    -webkit-font-smoothing: antialiased;
+    text-shadow: 0 0 2px rgba(0,255,136,0.5), 0 0 6px rgba(0,255,0,0.3);
+    overflow: hidden;
+    position: relative;
+  }
 
-/* Terminal Container */
-#terminal {
-  padding: 20px;
-  white-space: pre-wrap;
-  height: 100vh;
-  overflow-y: hidden;
-  animation: flicker 0.15s infinite;
-  position: relative;
-  z-index: 1;
-}
+  /* ---- Background Mask (Guy Fawkes) ---- */
+  .bg-mask {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    z-index: 0;
+    mix-blend-mode: lighten;
+  }
+  .bg-mask img {
+    width: min(70vmin, 900px);
+    opacity: 0.08;
+    filter: drop-shadow(0 0 16px rgba(0,255,136,0.08));
+    animation: maskFlicker 4s infinite;
+    will-change: opacity;
+  }
+  @keyframes maskFlicker {
+    0%, 50%, 100% { opacity: 0.08; }
+    25% { opacity: 0.12; }
+    75% { opacity: 0.05; }
+  }
 
-@keyframes flicker {
-  0%,19%,21%,23%,25%,54%,56%,100% { opacity: 1; }
-  20%,22%,24%,55% { opacity: 0.85; }
-}
+  /* ---- Optional: Swap to Anonymous "A" logo (commented) ----
+  .bg-mask img { content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="%2300ff88"><circle cx="256" cy="256" r="220" fill="none" stroke="%2300ff88" stroke-width="18"/><path d="M256 90l-90 260h52l16-52h88l16 52h52L256 90zm0 88 30 90h-60l30-90z" /></svg>'); }
+  ------------------------------------------------------------ */
 
-/* Cursor */
-.cursor {
-  display: inline-block;
-  width: 10px;
-  background-color: #0f0;
-  margin-left: 2px;
-  animation: blink 1s step-start infinite;
-}
+  /* ---- Scanline overlay ---- */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      repeating-linear-gradient(rgba(0,255,136,0.05) 0 1px, transparent 1px 2px);
+    pointer-events: none;
+    z-index: 3;
+  }
 
-@keyframes blink { 50% { background-color: transparent; } }
+  /* ---- Noise (very subtle) ---- */
+  .noise {
+    position: fixed;
+    inset: -50%;
+    background-image: radial-gradient(rgba(0,255,136,0.035) 1px, transparent 1px);
+    background-size: 3px 3px;
+    animation: drift 28s linear infinite;
+    mix-blend-mode: lighten;
+    z-index: 1;
+    pointer-events: none;
+  }
+  @keyframes drift {
+    from { transform: translate3d(0,0,0); }
+    to   { transform: translate3d(10%,10%,0); }
+  }
 
-/* Scanline overlay */
-body::after {
-  content: '';
-  position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: repeating-linear-gradient(
-    rgba(0,255,0,0.05) 0 1px,
-    transparent 1px 2px
-  );
-  pointer-events: none;
-}
+  /* ---- Layout ---- */
+  .wrap {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+  }
 
-/* Glitch effect on letters */
-.glitch {
-  display: inline-block;
-  animation: glitchShift 0.2s infinite;
-}
+  .card {
+    width: min(900px, 92vw);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: clamp(20px, 4vw, 40px);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(4px) saturate(110%);
+  }
 
-@keyframes glitchShift {
-  0%,20%,40%,60%,80%,100% { transform: translate(0,0); }
-  10% { transform: translate(-1px, 0); }
-  30% { transform: translate(1px, 0); }
-  50% { transform: translate(-2px, 0); }
-  70% { transform: translate(2px, 0); }
-  90% { transform: translate(-1px, 0); }
-}
+  .title {
+    display: inline-block;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    font-size: clamp(22px, 3.8vw, 36px);
+    color: var(--green-strong);
+    text-transform: uppercase;
+    position: relative;
+    margin: 0 0 12px 0;
+  }
 
-/* Links highlight */
-.cmd-link { cursor: pointer; color: #0f0; text-decoration: underline; }
+  /* glitch effect */
+  .glitch {
+    position: relative;
+  }
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    clip-path: inset(0 0 0 0);
+    animation: glitchShift 2.2s infinite;
+  }
+  .glitch::before {
+    color: #0ff;
+    transform: translate(1px, -1px);
+    mix-blend-mode: screen;
+  }
+  .glitch::after {
+    color: #f0f;
+    transform: translate(-1px, 1px);
+    mix-blend-mode: screen;
+    animation-delay: 0.9s;
+  }
+  @keyframes glitchShift {
+    0% { clip-path: inset(0 0 0 0); }
+    10% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 0); }
+    20% { clip-path: inset(80% 0 5% 0); transform: translate(1px, 0); }
+    30% { clip-path: inset(40% 0 30% 0); }
+    40% { clip-path: inset(15% 0 55% 0); }
+    50% { clip-path: inset(60% 0 20% 0); }
+    60% { clip-path: inset(25% 0 50% 0); }
+    70% { clip-path: inset(45% 0 35% 0); }
+    80% { clip-path: inset(5% 0 80% 0); }
+    90% { clip-path: inset(70% 0 10% 0); }
+    100%{ clip-path: inset(0 0 0 0); }
+  }
+
+  .subtitle {
+    margin: 0 0 18px 0;
+    opacity: 0.9;
+    font-size: clamp(14px, 2.2vw, 18px);
+  }
+
+  .body {
+    margin: 12px 0 22px 0;
+    line-height: 1.6;
+    font-size: clamp(14px, 2.2vw, 18px);
+  }
+
+  .meta {
+    font-size: 13px;
+    opacity: 0.8;
+    margin-top: 6px;
+  }
+
+  /* ---- Buttons / Links ---- */
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    color: var(--green);
+    background: rgba(0, 0, 0, 0.35);
+    text-decoration: none;
+    transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+    font-weight: 600;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(0,255,136,0.45);
+    box-shadow: 0 0 12px rgba(0,255,136,0.18);
+  }
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px dashed rgba(0,255,136,0.35);
+    margin-left: 8px;
+    opacity: 0.9;
+  }
+
+  /* ---- Reduce animations for prefers-reduced-motion ---- */
+  @media (prefers-reduced-motion: reduce) {
+    .bg-mask img,
+    .noise,
+    .glitch::before,
+    .glitch::after {
+      animation: none !important;
+    }
+  }
 </style>
 </head>
 <body>
 
-<img id="mask" src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Guy_Fawkes_Mask.svg" alt="Anonymous Mask"/>
+  <!-- Background watermark (Guy Fawkes Mask) -->
+  <div class="bg-mask" aria-hidden="true">
+    https://upload.wikimedia.org/wikipedia/commons/2/2c/Guy_Fawkes_Mask.svg
+  </div>
 
-<div id="terminal"></div>
+  <!-- Subtle noise -->
+  <div class="noise" aria-hidden="true"></div>
+
+  <!-- Main announcement card -->
+  <main class="wrap">
+    <section class="card" role="region" aria-label="Anonymous Announcement">
+      <h1 class="title glitch" data-text="ANONYMOUS ANNOUNCEMENT">ANONYMOUS ANNOUNCEMENT</h1>
+      <p class="subtitle">Transmission online. Channel integrity verified.</p>
+
+      <div class="body" id="announcement">
+        We speak only once. The message is simple:
+        <br><br>
+        Research, publish, repeat. Signals are clear. Artifacts persist.
+        The network remembers.
+        <br><br>
+        Read, verify, and mirror. Discretion advised.
+      </div>
+
+      <div class="actions" aria-label="Primary links">
+        https://github.com/wrathfulDiety
+          &#x25B6; PROFILE
+        </a>
+        https://hasanka-amarasinghe.medium.com/
+          &#x270E; BLOG
+        </a>
+        https://www.cve.org/CVERecord?id=CVE-2025-52357
+          &#x26A1; CVE‑2025‑52357
+        </a>
+        https://www.cve.org/CVERecord?id=CVE-2025-56311
+          &#x26A1; CVE‑2025‑56311
+        </a>
+      </div>
+
+      <p class="meta">Last updated: <span id="ts">auto</span><span class="tag">encrypted broadcast</span></p>
+    </section>
+  </main>
 
 <script>
-const terminal = document.getElementById("terminal");
-
-// Boot/Intro lines
-const introLines = [
-  "██████╗ ██████╗  █████╗ ███████╗██╗   ██╗ █████╗ ███╗   ██╗",
-  "██╔══██╗██╔══██╗██╔══██╗██╔════╝██║   ██║██╔══██╗████╗  ██║",
-  "██████╔╝██████╔╝███████║███████╗██║   ██║███████║██╔██╗ ██║",
-  "██╔═══╝ ██╔═══╝ ██╔══██║╚════██║╚██╗ ██╔╝██╔══██║██║╚██╗██║",
-  "██║     ██║     ██║  ██║███████║ ╚████╔╝ ██║  ██║██║ ╚████║",
-  "╚═╝     ╚═╝     ╚═╝  ╚═╝╚══════╝  ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═══╝",
-  "ANONYMOUS TERMINAL LAUNCHING...",
-  "Decrypting comms... [OK]",
-  "System ready. Operator, welcome."
-];
-
-// Links as commands
-const commands = [
-  {label: "PROFILE", action: "https://github.com/wrathfulDiety"},
-  {label: "BLOG", action: "https://hasanka-amarasinghe.medium.com/"},
-  {label: "CVE-52357", action: "https://www.cve.org/CVERecord?id=CVE-2025-52357"},
-  {label: "CVE-56311", action: "https://www.cve.org/CVERecord?id=CVE-2025-56311"}
-];
-
-// Random mission logs
-const logs = [
-  "Scanning 10.0.0.* ...",
-  "Enumerating endpoints...",
-  "Injecting payload...",
-  "Bypassing firewall rules...",
-  "Analyzing session tokens...",
-  "Privilege escalation detected...",
-  "Randomizing packet streams...",
-  "Logging network traffic...",
-  "Static interference detected..."
-];
-
-// Typewriter effect
-function typeLine(text, callback, speed=40){
-  let i=0;
-  const interval = setInterval(()=>{
-    let char = text.charAt(i);
-    if(Math.random()<0.02) char = String.fromCharCode(33+Math.random()*94);
-    const span = document.createElement("span");
-    span.textContent = char;
-    if(Math.random()<0.05) span.className = "glitch";
-    terminal.appendChild(span);
-    i++;
-    terminal.scrollTop = terminal.scrollHeight;
-    if(i===text.length){
-      clearInterval(interval);
-      terminal.appendChild(document.createElement("br"));
-      callback();
-    }
-  }, speed);
-}
-
-function runIntro(index){
-  if(index<introLines.length){
-    typeLine(introLines[index], ()=>runIntro(index+1));
-  } else {
-    showCommands();
-  }
-}
-
-function showCommands(){
-  terminal.appendChild(document.createElement("br"));
-  terminal.innerHTML += "AVAILABLE COMMANDS:\n";
-  commands.forEach(cmd=>{
-    const span = document.createElement("span");
-    span.className = "cmd-link glitch";
-    span.textContent = `[${cmd.label}] `;
-    span.onclick = ()=>window.open(cmd.action,"_blank");
-    terminal.appendChild(span);
-  });
-  const cursor = document.createElement("span");
-  cursor.className = "cursor";
-  terminal.appendChild(cursor);
-  startLogs();
-}
-
-function startLogs(){
-  setInterval(()=>{
-    const log = logs[Math.floor(Math.random()*logs.length)];
-    typeLine("> " + log, ()=>{}, 25);
-  }, 3000);
-}
-
-// Start the sequence
-runIntro(0);
+  // Replace timestamp text with the current date in user's locale
+  (function () {
+    try {
+      const ts = document.getElementById('ts');
+      const now = new Date();
+      ts.textContent = now.toLocaleString(undefined, {
+        year: 'numeric', month: 'short', day: '2-digit',
+        hour: '2-digit', minute: '2-digit'
+      });
+    } catch (e) {}
+  }());
 </script>
-
 </body>
 </html>
