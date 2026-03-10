@@ -14,6 +14,26 @@ body {
   line-height: 1.4em;
   overflow: hidden;
   text-shadow: 0 0 2px #0f0, 0 0 5px #0f0;
+  position: relative;
+}
+
+#background-mask {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 800px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  opacity: 0.05;
+  pointer-events: none;
+  animation: maskFlicker 3s infinite;
+  mix-blend-mode: lighten;
+}
+
+@keyframes maskFlicker {
+  0%, 50%, 100% { opacity: 0.05; }
+  25% { opacity: 0.08; }
+  75% { opacity: 0.03; }
 }
 
 #terminal {
@@ -22,6 +42,8 @@ body {
   height: 100vh;
   overflow-y: hidden;
   animation: flicker 0.1s infinite;
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes flicker {
@@ -69,12 +91,15 @@ body::after {
 </style>
 </head>
 <body>
+<img id="background-mask" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Guy_Fawkes_Mask.svg/800px-Guy_Fawkes_Mask.svg.png" alt="Anonymous Mask"/>
+
 <div id="terminal"></div>
+
 <script>
 const terminal = document.getElementById("terminal");
 
 const bootLines = [
-  "ANONYMOUS CRT TERMINAL v2.0",
+  "ANONYMOUS CRT TERMINAL v3.0",
   "Initializing virtual phosphor...",
   "Loading hacker modules...",
   "Decrypting comms... [OK]",
