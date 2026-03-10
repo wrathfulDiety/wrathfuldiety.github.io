@@ -1,168 +1,167 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-
-<title>WrathfulDiety | Security Research</title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RudraForge CRT Terminal</title>
 <style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    line-height: 1.3em;
+    overflow: hidden;
+    text-shadow: 0 0 2px #0f0, 0 0 5px #0f0;
+  }
 
-body{
-background:#000;
-color:#00ff9c;
-font-family:monospace;
-margin:0;
-padding:0;
-}
+  #terminal {
+    padding: 20px;
+    white-space: pre-wrap;
+    height: 100vh;
+    overflow-y: hidden;
+    position: relative;
+    animation: flicker 0.15s infinite;
+  }
 
-.container{
-max-width:1000px;
-margin:auto;
-padding:40px;
-}
+  @keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+    20%, 22%, 24%, 55% { opacity: 0.85; }
+  }
 
-h1{
-font-size:40px;
-color:#00ff9c;
-text-shadow:0 0 10px #00ff9c;
-}
+  .cursor {
+    display: inline-block;
+    width: 10px;
+    background-color: #0f0;
+    margin-left: 2px;
+    animation: blink 1s step-start infinite;
+  }
 
-h2{
-border-bottom:1px solid #00ff9c;
-padding-bottom:5px;
-margin-top:40px;
-}
+  @keyframes blink {
+    50% { background-color: transparent; }
+  }
 
-a{
-color:#00ff9c;
-text-decoration:none;
-}
+  .cmd-link {
+    color: #0f0;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 
-a:hover{
-text-shadow:0 0 8px #00ff9c;
-}
+  .cmd-link:hover {
+    color: #aff;
+  }
 
-.terminal{
-background:#050505;
-border:1px solid #00ff9c;
-padding:20px;
-margin-top:20px;
-}
-
-.badge{
-display:inline-block;
-border:1px solid #00ff9c;
-padding:5px 10px;
-margin:5px;
-}
-
-.tools{
-display:flex;
-gap:20px;
-flex-wrap:wrap;
-margin-top:20px;
-}
-
-.tool{
-border:1px solid #00ff9c;
-padding:15px;
-width:250px;
-}
-
-.footer{
-margin-top:60px;
-opacity:0.6;
-font-size:14px;
-}
-
+  /* scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+      rgba(0,255,0,0.05) 0 1px,
+      transparent 1px 2px
+    );
+    pointer-events: none;
+  }
 </style>
-
 </head>
-
 <body>
+<div id="terminal"></div>
+<script>
+const terminal = document.getElementById("terminal");
 
-<div class="container">
+const bootLines = [
+  "CRT BIOS v1.3 initializing...",
+  "Phosphor tube check: [OK]",
+  "Loading telemetry modules...",
+  "Encrypting comms... [OK]",
+  "Loading user profile: WrathfulDiety",
+  "Mission logs synchronized",
+  "Pentesting suite online",
+  "System ready. Commander, welcome."
+];
 
-<h1>WrathfulDiety</h1>
+const banner = `
+██████╗ ██╗    ██╗██████╗ ██████╗  █████╗ ███████╗███████╗
+██╔══██╗██║    ██║██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝
+██████╔╝██║ █╗ ██║██████╔╝██████╔╝███████║███████╗█████╗  
+██╔═══╝ ██║███╗██║██╔═══╝ ██╔═══╝ ██╔══██║╚════██║██╔══╝  
+██║     ╚███╔███╔╝██║     ██║     ██║  ██║███████║███████╗
+╚═╝      ╚══╝╚══╝ ╚═╝     ╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝
+`;
 
-<div class="terminal">
-Cybersecurity Engineer • Penetration Tester • Security Researcher
-<br><br>
-Application Security | Red Team | Bug Bounty
-</div>
+const commands = [
+  {label: "WHOAMI", action: "https://github.com/wrathfulDiety"},
+  {label: "TOOLS", action: "https://wrathfuldiety.github.io/RudraForge/tools.html"},
+  {label: "CVE", action: "https://www.cve.org/Search?search=CVE-2025-52357"},
+  {label: "BLOG", action: "https://hasanka-amarasinghe.medium.com/"},
+];
 
-<h2>About</h2>
+const missionLogs = [
+  "Scanning network 192.168.*.* ...",
+  "Identifying open ports...",
+  "Enumerating endpoints...",
+  "Fetching CVE details...",
+  "Simulating payload delivery...",
+  "Checking WAF rules...",
+  "Privilege escalation tests running...",
+  "Analyzing HTTP responses...",
+  "Logging session tokens...",
+  "Validating encryption routines..."
+];
 
-<p>
-Cybersecurity engineer from Sri Lanka focusing on offensive security,
-application security testing, and vulnerability research.
-</p>
+function typeLine(text, callback, speed=40) {
+  let i = 0;
+  const interval = setInterval(() => {
+    terminal.innerHTML += text.charAt(i);
+    i++;
+    terminal.scrollTop = terminal.scrollHeight;
+    if (i === text.length) {
+      clearInterval(interval);
+      terminal.innerHTML += "\n";
+      callback();
+    }
+  }, speed);
+}
 
-<p>
-Active bug bounty hunter and security researcher with published CVEs
-and experience in discovering vulnerabilities in real-world systems.
-</p>
+function bootSequence(index) {
+  if(index < bootLines.length) {
+    typeLine(bootLines[index], () => bootSequence(index + 1));
+  } else {
+    typeLine(banner + "\n\n", initCommands);
+  }
+}
 
-<h2>Security Research</h2>
+function initCommands() {
+  terminal.innerHTML += "Available Commands:\n";
+  commands.forEach(cmd => terminal.innerHTML += `[${cmd.label}] `);
+  terminal.innerHTML += "\n\nClick command to open link:\n";
+  commands.forEach(cmd => {
+    const span = document.createElement("span");
+    span.className = "cmd-link";
+    span.textContent = `[${cmd.label}] `;
+    span.onclick = () => window.open(cmd.action, "_blank");
+    terminal.appendChild(span);
+  });
+  const cursor = document.createElement("span");
+  cursor.className = "cursor";
+  terminal.appendChild(cursor);
 
-<div class="terminal">
+  startMissionLogs();
+}
 
-<strong>CVE‑2025‑52357</strong><br>
-Reflected XSS vulnerability in FiberHome FD602GW‑DX‑R410 router admin interface.
-<br><br>
+// Random logs with flicker effect
+function startMissionLogs() {
+  setInterval(() => {
+    const log = missionLogs[Math.floor(Math.random() * missionLogs.length)];
+    typeLine("> " + log, ()=>{}, 25);
+  }, 3500);
+}
 
-<strong>CVE‑2025‑56311</strong><br>
-CSRF vulnerability allowing remote reboot of FiberHome FD602GW‑DX‑R410 router.
-
-<br><br>
-
-<a href="https://www.cve.org/CVERecord?id=CVE-2025-52357">View CVE‑2025‑52357</a><br>
-<a href="https://www.cve.org/CVERecord?id=CVE-2025-56311">View CVE‑2025‑56311</a>
-
-</div>
-
-<h2>Security Tools</h2>
-
-<div class="tools">
-
-<div class="tool">
-<strong>RudraForge</strong>
-<br><br>
-Country‑specific username and email generator for penetration testing and username enumeration.
-<br><br>
-<a href="https://wrathfuldiety.github.io/RudraForge/">Launch Tool</a>
-</div>
-
-</div>
-
-<h2>Writing</h2>
-
-<p>
-Technical articles and security research:
-</p>
-
-<a href="https://hasanka-amarasinghe.medium.com">
-Medium Blog
-</a>
-
-<h2>Contact</h2>
-
-<p>
-LinkedIn:
-</p>
-
-<a href="https://linkedin.com/in/hasanka-amarasinghe">
-linkedin.com/in/hasanka-amarasinghe
-</a>
-
-<div class="footer">
-
-WrathfulDiety Security Research
-
-</div>
-
-</div>
-
+// Start
+bootSequence(0);
+</script>
 </body>
-
 </html>
