@@ -1,207 +1,216 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WrathfulDiety Terminal</title>
-
 <style>
-
-body{
-background:black;
-color:#00ff9c;
-font-family:monospace;
-margin:0;
+/* Matrix background */
+body {
+  margin: 0;
+  overflow: hidden;
+  background: black;
+  font-family: monospace;
+  color: #00ff9c;
 }
 
-.terminal{
-
-max-width:900px;
-margin:auto;
-padding:40px;
-
+/* Terminal container */
+.terminal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 900px;
+  width: 90%;
+  padding: 20px;
+  background: rgba(0,0,0,0.85);
+  box-shadow: 0 0 20px #00ff9c;
+  border-radius: 8px;
+  z-index: 10;
 }
 
-h1{
-color:#00ff9c;
-text-shadow:0 0 10px #00ff9c;
+h1 {
+  color: #00ff9c;
+  text-shadow: 0 0 10px #00ff9c;
 }
 
-#output{
-margin-top:20px;
-white-space:pre-line;
+#output {
+  margin-top: 20px;
+  white-space: pre-line;
+  min-height: 200px;
 }
 
-.input-line{
-display:flex;
-margin-top:10px;
+.input-line {
+  display: flex;
+  margin-top: 10px;
 }
 
-.prompt{
-margin-right:10px;
+.prompt {
+  margin-right: 10px;
 }
 
-input{
-
-background:black;
-border:none;
-color:#00ff9c;
-font-family:monospace;
-font-size:16px;
-outline:none;
-width:100%;
-
+input {
+  background: black;
+  border: none;
+  color: #00ff9c;
+  font-family: monospace;
+  font-size: 16px;
+  outline: none;
+  width: 100%;
 }
 
-.link{
-
-color:#00ff9c;
-text-decoration:none;
-
+/* Links inside output */
+a {
+  color: #00ff9c;
+  text-decoration: underline;
 }
 
 </style>
-
 </head>
-
 <body>
 
+<canvas id="matrix"></canvas>
+
 <div class="terminal">
-
-<h1>WrathfulDiety Security Terminal</h1>
-
-<div>
-Type <b>help</b> to see available commands
-</div>
-
-<div id="output"></div>
-
-<div class="input-line">
-
-<div class="prompt">></div>
-
-<input id="command" autofocus>
-
-</div>
-
+  <h1>WrathfulDiety Security Terminal</h1>
+  <div>Type <b>help</b> to see available commands</div>
+  <div id="output"></div>
+  <div class="input-line">
+    <div class="prompt">></div>
+    <input id="command" autofocus autocomplete="off">
+  </div>
 </div>
 
 <script>
-
-const output=document.getElementById("output");
-const input=document.getElementById("command");
-
-function print(text){
-output.innerHTML += text + "\n\n";
+// Boot animation
+const output = document.getElementById("output");
+function print(text, delay=0) {
+  setTimeout(() => { output.innerHTML += text + "\n\n"; }, delay);
 }
 
-function run(cmd){
+function bootSequence() {
+  const lines = [
+    "Initializing security terminal...",
+    "Loading vulnerability database...",
+    "Loading tools...",
+    "Access granted.",
+    "Welcome, WrathfulDiety!"
+  ];
+  lines.forEach((line, i) => print(line, i*800));
+}
 
-cmd=cmd.toLowerCase();
+bootSequence();
 
-if(cmd==="help"){
+// Commands
+const input = document.getElementById("command");
 
-print(`Available commands:
+function run(cmd) {
+  cmd = cmd.toLowerCase();
 
+  if(cmd==="help") {
+    print(`Available commands:
 about      - about the researcher
+whoami     - your info
 tools      - security tools
 cve        - vulnerability research
 blog       - medium articles
 contact    - contact info
 clear      - clear terminal`);
+  }
 
-}
-
-else if(cmd==="about"){
-
-print(`Cybersecurity Engineer from Sri Lanka.
-
+  else if(cmd==="about" || cmd==="whoami") {
+    print(`Cybersecurity Engineer from Sri Lanka.
 Specializing in:
-
 • Penetration Testing
 • Application Security
 • Red Team Operations
 • Bug Bounty Hunting
 
 Focus areas include web application security and vulnerability research.`);
+  }
 
-}
+  else if(cmd==="tools") {
+    print(`Security Tools:
+• RudraForge - Country-specific username/email generator for pentesting
+Launch: https://wrathfuldiety.github.io/RudraForge/`);
+  }
 
-else if(cmd==="tools"){
+  else if(cmd==="cve") {
+    print(`Published CVEs:
+• CVE-2025-52357 - Reflected XSS in FiberHome FD602GW-DX-R410 router
+• CVE-2025-56311 - CSRF vulnerability allowing remote reboot
+More details: https://www.cve.org/`);
+  }
 
-print(`Security Tools
-
-RudraForge
-Country-specific username/email generator for pentesting
-
-Launch:
-https://wrathfuldiety.github.io/RudraForge/`);
-
-}
-
-else if(cmd==="cve"){
-
-print(`Published CVEs
-
-CVE-2025-52357
-Reflected XSS in FiberHome FD602GW-DX-R410 router
-
-CVE-2025-56311
-CSRF vulnerability allowing remote reboot
-
-More details:
-https://www.cve.org/`);
-
-}
-
-else if(cmd==="blog"){
-
-print(`Security Articles
-
+  else if(cmd==="blog") {
+    print(`Security Articles:
 https://hasanka-amarasinghe.medium.com`);
+  }
 
-}
-
-else if(cmd==="contact"){
-
-print(`LinkedIn
-
+  else if(cmd==="contact") {
+    print(`LinkedIn:
 https://linkedin.com/in/hasanka-amarasinghe`);
+  }
 
+  else if(cmd==="clear") {
+    output.innerHTML = "";
+  }
+
+  else if(cmd==="scan") {
+    print(`Simulated scan results:
+• Open ports: 22, 80, 443
+• Web app vulnerabilities: XSS, SSRF
+• Tools ready for exploitation.`);
+  }
+
+  else{
+    print("Command not found. Type 'help'.");
+  }
 }
 
-else if(cmd==="clear"){
-
-output.innerHTML="";
-
-}
-
-else{
-
-print("Command not found. Type 'help'.");
-
-}
-
-}
-
-input.addEventListener("keydown",function(e){
-
-if(e.key==="Enter"){
-
-let cmd=input.value;
-
-print("> " + cmd);
-
-run(cmd);
-
-input.value="";
-
-}
-
+input.addEventListener("keydown", function(e){
+  if(e.key==="Enter"){
+    let cmd = input.value;
+    print("> " + cmd);
+    run(cmd);
+    input.value="";
+    window.scrollTo(0, document.body.scrollHeight);
+  }
 });
 
+// Matrix background effect
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()".split("");
+const fontSize = 16;
+const columns = Math.floor(width / fontSize);
+const drops = Array(columns).fill(1);
+
+function draw() {
+  ctx.fillStyle = "rgba(0,0,0,0.05)";
+  ctx.fillRect(0,0,width,height);
+  ctx.fillStyle = "#00ff9c";
+  ctx.font = fontSize + "px monospace";
+
+  for(let i=0;i<drops.length;i++){
+    const text = letters[Math.floor(Math.random()*letters.length)];
+    ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+    if(drops[i]*fontSize>height && Math.random()>0.975){
+      drops[i] = 0;
+    }
+    drops[i]++;
+  }
+}
+
+setInterval(draw, 50);
+
+window.addEventListener("resize", () => {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+});
 </script>
 
 </body>
-
 </html>
