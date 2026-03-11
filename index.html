@@ -36,24 +36,44 @@ body:has(a:hover) #cursor,body:has(button:hover) #cursor{width:34px;height:34px;
 /* MATRIX */
 #matrix-canvas{position:fixed;inset:0;z-index:0;opacity:.12;}
 
-/* REAL MASK IMAGE */
-#mask-bg{
-  position:fixed;top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:min(48vh,48vw);
-  pointer-events:none;z-index:1;
-  animation:maskF 5s infinite;
-  filter:drop-shadow(0 0 18px var(--g)) drop-shadow(0 0 50px rgba(0,255,65,.15)) invert(1) sepia(1) saturate(3) hue-rotate(90deg);
+/* PEEKER FIGURE */
+#peeker{
+  position:fixed;
+  bottom:0; left:50%;
+  transform:translateX(-50%) translateY(100%);
+  width:clamp(160px,22vw,280px);
+  pointer-events:none;
+  z-index:5;
+  filter:drop-shadow(0 0 30px rgba(0,255,65,.5)) drop-shadow(0 0 80px rgba(0,255,65,.2));
+  transition:transform 3.5s cubic-bezier(0.22,1,0.36,1);
+  will-change:transform;
 }
-@keyframes maskF{
-  0%,100%{opacity:.11;}
-  7%{opacity:.05;}
-  8%{opacity:.26;filter:drop-shadow(0 0 60px var(--g)) drop-shadow(0 0 120px rgba(0,255,65,.4)) invert(1) sepia(1) saturate(3) hue-rotate(90deg);}
-  9%{opacity:.04;}10%{opacity:.15;}50%{opacity:.11;}
-  60%{opacity:.05;}
-  61%{opacity:.30;filter:drop-shadow(0 0 70px var(--g)) invert(1) sepia(1) saturate(3) hue-rotate(90deg);}
-  62%{opacity:.03;}63%{opacity:.13;}85%{opacity:.08;}86%{opacity:.19;}
+#peeker.peek{
+  transform:translateX(-50%) translateY(18%);
 }
+#peeker.full-peek{
+  transform:translateX(-50%) translateY(-2%);
+}
+/* eye glow on the mask within peeker */
+@keyframes eyeGlow{
+  0%,100%{opacity:.6;}
+  50%{opacity:1;filter:drop-shadow(0 0 6px #00ff41);}
+}
+#peeker .eye-glow{ animation:eyeGlow 2.5s infinite; }
+
+/* subtle ambient light cast on floor when peeking */
+#peeker-shadow{
+  position:fixed;
+  bottom:0;left:50%;
+  transform:translateX(-50%);
+  width:clamp(120px,18vw,220px);
+  height:40px;
+  background:radial-gradient(ellipse,rgba(0,255,65,.12) 0%,transparent 70%);
+  pointer-events:none;z-index:4;
+  opacity:0;
+  transition:opacity 2s;
+}
+#peeker-shadow.visible{opacity:1;}
 
 /* CRT */
 #crt{position:fixed;inset:0;pointer-events:none;z-index:200;}
@@ -184,12 +204,96 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
 <!-- MATRIX -->
 <canvas id="matrix-canvas"></canvas>
 
-<!-- REAL GUY FAWKES MASK — hidden via onerror if unavailable -->
-<img id="mask-bg"
-  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Vendetta_Mask_Guy_Fawkes_Illustration.png/400px-Vendetta_Mask_Guy_Fawkes_Illustration.png"
-  alt=""
-  onerror="this.style.display='none'"
-/>
+<!-- AMBIENT SHADOW CAST ON FLOOR -->
+<div id="peeker-shadow"></div>
+
+<!-- HOODED ANONYMOUS FIGURE — PEEKS FROM BOTTOM -->
+<svg id="peeker" viewBox="0 0 260 420" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- ═══ CLOAK / BODY ═══ -->
+  <!-- Main cloak body — wide at shoulders, flows down -->
+  <path d="M 30 420 L 10 320 Q 0 250 20 200 Q 40 160 130 145 Q 220 160 240 200 Q 260 250 250 320 L 230 420 Z"
+        fill="#000a02" stroke="#003a0e" stroke-width="1"/>
+  <!-- Cloak centre fold shadow -->
+  <path d="M 130 160 L 125 420" stroke="#001a05" stroke-width="3" fill="none"/>
+  <!-- Cloak hood outer shape -->
+  <path d="M 50 190 Q 55 100 130 75 Q 205 100 210 190 Q 200 175 130 168 Q 60 175 50 190 Z"
+        fill="#000d03" stroke="#003a0e" stroke-width="1.2"/>
+  <!-- Hood inner dark shadow -->
+  <path d="M 70 185 Q 75 115 130 95 Q 185 115 190 185 Q 175 170 130 165 Q 85 170 70 185 Z"
+        fill="#000500" stroke="none"/>
+
+  <!-- ═══ NECK ═══ -->
+  <rect x="112" y="162" width="36" height="22" fill="#000d02" rx="4"/>
+
+  <!-- ═══ GUY FAWKES MASK FACE ═══ -->
+  <!-- Face base — oval, pale -->
+  <ellipse cx="130" cy="133" rx="54" ry="64" fill="#e8f5e0" stroke="#006018" stroke-width="1"/>
+  <!-- Subtle face shading -->
+  <ellipse cx="130" cy="133" rx="50" ry="60" fill="none" stroke="rgba(0,80,20,0.15)" stroke-width="8"/>
+
+  <!-- LEFT EYE SOCKET -->
+  <ellipse cx="108" cy="117" rx="20" ry="13" fill="#000a01" stroke="#00cc30" stroke-width="1.2"/>
+  <!-- Left iris -->
+  <ellipse cx="108" cy="117" rx="8" ry="9" fill="none" stroke="#00ff41" stroke-width="1" class="eye-glow"/>
+  <ellipse cx="108" cy="117" rx="4" ry="4.5" fill="#000500"/>
+  <!-- Left gleam -->
+  <ellipse cx="112" cy="113" rx="2.5" ry="1.8" fill="rgba(0,255,65,.7)" class="eye-glow"/>
+  <!-- Left arched brow -->
+  <path d="M 88 104 Q 107 94 126 103" fill="none" stroke="#004010" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- RIGHT EYE SOCKET -->
+  <ellipse cx="152" cy="117" rx="20" ry="13" fill="#000a01" stroke="#00cc30" stroke-width="1.2"/>
+  <!-- Right iris -->
+  <ellipse cx="152" cy="117" rx="8" ry="9" fill="none" stroke="#00ff41" stroke-width="1" class="eye-glow"/>
+  <ellipse cx="152" cy="117" rx="4" ry="4.5" fill="#000500"/>
+  <!-- Right gleam -->
+  <ellipse cx="156" cy="113" rx="2.5" ry="1.8" fill="rgba(0,255,65,.7)" class="eye-glow"/>
+  <!-- Right arched brow -->
+  <path d="M 134 103 Q 153 94 172 104" fill="none" stroke="#004010" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- NOSE -->
+  <path d="M 124 127 L 119 148 Q 130 154 141 148 L 136 127" fill="#d8f0cc" stroke="#006018" stroke-width=".8"/>
+  <ellipse cx="122" cy="147" rx="5" ry="3.2" fill="rgba(0,0,0,.25)"/>
+  <ellipse cx="138" cy="147" rx="5" ry="3.2" fill="rgba(0,0,0,.25)"/>
+
+  <!-- ROSY CHEEKS -->
+  <ellipse cx="84"  cy="138" rx="18" ry="12" fill="rgba(0,200,60,0.18)"/>
+  <ellipse cx="176" cy="138" rx="18" ry="12" fill="rgba(0,200,60,0.18)"/>
+
+  <!-- SMILE / MOUTH -->
+  <path d="M 100 157 Q 130 170 160 157 Q 157 180 130 186 Q 103 180 100 157 Z"
+        fill="#c8e8c0" stroke="#006018" stroke-width="1.2"/>
+  <!-- Smile curve -->
+  <path d="M 100 157 Q 115 152 130 157 Q 145 152 160 157"
+        fill="none" stroke="#004010" stroke-width="1.8"/>
+  <!-- Dimple creases -->
+  <path d="M 100 157 Q 95 150 100 143" fill="none" stroke="#006018" stroke-width=".9"/>
+  <path d="M 160 157 Q 165 150 160 143" fill="none" stroke="#006018" stroke-width=".9"/>
+
+  <!-- CURLING MUSTACHE — the iconic feature -->
+  <!-- Left mustache curl -->
+  <path d="M 130 152 Q 120 143 109 147 Q 100 150 98 157 Q 97 163 104 161 Q 110 159 110 153"
+        fill="none" stroke="#003a10" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right mustache curl -->
+  <path d="M 130 152 Q 140 143 151 147 Q 160 150 162 157 Q 163 163 156 161 Q 150 159 150 153"
+        fill="none" stroke="#003a10" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- POINTED GOATEE -->
+  <path d="M 118 180 Q 130 202 142 180" fill="none" stroke="#003a10" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="130" cy="193" rx="7" ry="13" fill="#c8e8c0" stroke="#004010" stroke-width="1"/>
+
+  <!-- CLOAK COLLAR OVERLAP (in front of neck/chin) -->
+  <path d="M 80 185 Q 90 172 130 168 Q 170 172 180 185 L 175 200 Q 160 192 130 190 Q 100 192 85 200 Z"
+        fill="#000d03" stroke="#002a08" stroke-width="1"/>
+
+  <!-- CLOAK SHOULDER FOLDS -->
+  <path d="M 20 230 Q 40 210 80 205" fill="none" stroke="#002a08" stroke-width="1.5"/>
+  <path d="M 240 230 Q 220 210 180 205" fill="none" stroke="#002a08" stroke-width="1.5"/>
+  <path d="M 15 280 Q 45 260 75 255" fill="none" stroke="#001a05" stroke-width="1"/>
+  <path d="M 245 280 Q 215 260 185 255" fill="none" stroke="#001a05" stroke-width="1"/>
+
+</svg>
 
 <!-- CRT -->
 <div id="crt"></div>
@@ -202,7 +306,7 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">◈ <span>WRATHFUL</span>DIETY</div>
+  <div class="nav-logo">◈ <span>RUDRA</span>FORGE</div>
   <div class="nav-links">
     <a href="#about">ABOUT</a>
     <a href="#cve">CVE</a>
@@ -429,7 +533,7 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
 
 <footer>
   <div class="anon-footer">░░░ WE ARE ANONYMOUS · WE ARE LEGION · WE DO NOT FORGIVE · WE DO NOT FORGET · EXPECT US ░░░</div>
-  <div>© HASANKA-AMARASINGHE · WRATHFULDIETY · <span id="footer-year"></span></div>
+  <div>© HASANKA-AMARASINGHE · RUDRAFORGE · <span id="footer-year"></span></div>
 </footer>
 </div>
 
@@ -531,17 +635,59 @@ function typeNext(){
 }
 setTimeout(typeNext,3000);
 
-/* MASK GLITCH */
-const mask=document.getElementById('mask-bg');
-if(mask){
-  setInterval(()=>{
-    if(Math.random()>.58){
-      const dx=(Math.random()-.5)*12,dy=(Math.random()-.5)*7;
-      mask.style.transform=`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) skewX(${(Math.random()-.5)*2.5}deg)`;
-      setTimeout(()=>mask.style.transform='translate(-50%,-50%)',45+Math.random()*100);
-    }
-  },380);
+/* ══ PEEKER ANIMATION ══
+   Figure slowly rises from bottom, lingers, sinks back.
+   Randomly triggered with varying peek heights.
+*/
+const peeker = document.getElementById('peeker');
+const peekerShadow = document.getElementById('peeker-shadow');
+let peeking = false;
+
+function doPeek() {
+  if (peeking) return;
+  peeking = true;
+
+  // Show ambient floor shadow
+  peekerShadow.classList.add('visible');
+
+  // Rise up — partial peek first (just top of head)
+  peeker.classList.add('peek');
+
+  // After pause, rise to full peek (eyes + shoulders visible)
+  const riseDelay = 1200 + Math.random() * 800;
+  setTimeout(() => {
+    peeker.classList.add('full-peek');
+  }, riseDelay);
+
+  // Hold for a creepy amount of time then sink back
+  const holdTime = 4000 + Math.random() * 5000;
+  setTimeout(() => {
+    // quick glitch before leaving
+    peeker.style.transition = 'transform 0.08s ease';
+    const glitchX = (Math.random() - 0.5) * 14;
+    peeker.style.transform = `translateX(calc(-50% + ${glitchX}px)) translateY(-2%)`;
+    setTimeout(() => {
+      peeker.style.transition = 'transform 4s cubic-bezier(0.55,0,1,0.45)';
+      peeker.style.transform = '';
+      setTimeout(() => {
+        peeker.classList.remove('peek', 'full-peek');
+        peeker.style.transition = 'transform 3.5s cubic-bezier(0.22,1,0.36,1)';
+        peekerShadow.classList.remove('visible');
+        peeking = false;
+      }, 150);
+    }, 80);
+  }, riseDelay + holdTime);
 }
+
+// First peek after boot finishes
+setTimeout(doPeek, 5000);
+
+// Then randomly every 18-35 seconds
+function schedulePeek() {
+  const delay = 18000 + Math.random() * 17000;
+  setTimeout(() => { doPeek(); schedulePeek(); }, delay);
+}
+schedulePeek();
 
 /* SCROLL REVEAL */
 const obs=new IntersectionObserver(es=>es.forEach(e=>{
