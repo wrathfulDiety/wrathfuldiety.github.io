@@ -3,128 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RudraForge - Hacker Portfolio</title>
+<title>RudraForge - NASA Terminal</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
   body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    font-family: 'Share Tech Mono', monospace;
     background-color: #000;
+    font-family: 'Share Tech Mono', monospace;
     color: #00ff00;
-    position: relative;
+    overflow: hidden;
   }
 
-  /* Background mask/person */
-  .mask-container {
+  /* Flickering CRT effect */
+  body::after {
+    content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 400px;
-    height: 400px;
-    transform: translate(-50%, -50%);
-    background: url('https://i.imgur.com/2Shf3jX.png') center center no-repeat;
-    background-size: contain;
-    animation: headMove 6s infinite alternate ease-in-out;
-    opacity: 0.4;
-    z-index: 0;
+    top:0; left:0; width:100%; height:100%;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      rgba(0,0,0,0.05) 0px,
+      rgba(0,0,0,0.05) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    z-index: 2;
+    animation: scanline 0.1s infinite linear;
   }
 
-  @keyframes headMove {
-    0% { transform: translate(-50%, -50%) rotate(-2deg); }
-    50% { transform: translate(-50%, -50%) rotate(2deg); }
-    100% { transform: translate(-50%, -50%) rotate(-2deg); }
+  @keyframes scanline {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 2px; }
   }
 
-  /* Terminal text overlay */
   .terminal {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    padding: 40px;
+    padding: 30px;
     box-sizing: border-box;
-    z-index: 1;
+    height: 100vh;
     overflow-y: auto;
-    pointer-events: auto;
+    white-space: pre-wrap;
+    z-index: 1;
   }
 
-  .terminal h1, .terminal h2, .terminal h3, .terminal p, .terminal a {
-    margin: 0 0 10px 0;
-    line-height: 1.4em;
+  .flicker {
+    animation: flickerAnimation 1.5s infinite;
+  }
+
+  @keyframes flickerAnimation {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+    20%, 22%, 24%, 55% { opacity: 0.4; }
+  }
+
+  a {
     color: #00ff00;
     text-decoration: none;
   }
 
-  .terminal a:hover {
-    text-decoration: underline;
+  a:hover {
     color: #00ff99;
   }
-
-  /* Flicker/glitch effect */
-  .flicker {
-    animation: flickerAnimation 1s infinite;
-  }
-
-  @keyframes flickerAnimation {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-      opacity: 1;
-    }
-    20%, 22%, 24%, 55% {
-      opacity: 0.4;
-    }
-  }
-
-  /* Dynamic stats box */
-  .stats {
-    margin-top: 20px;
-  }
-
-  /* Scrollbar invisible */
-  ::-webkit-scrollbar { display: none; }
 </style>
 </head>
 <body>
-  <div class="mask-container"></div>
-
-  <div class="terminal">
-    <h1 class="flicker">RudraForge Hacker Portfolio</h1>
-    <p class="flicker">:man_technologist: Cybersecurity Engineer | Red Teamer | Bug Bounty Hunter</p>
-    <p class="flicker">Based in Sri Lanka</p>
-    <hr class="flicker">
-
-    <h2 class="flicker">🏅 CVEs and Research</h2>
-    <p class="flicker">• <a href="https://www.cve.org/CVERecord?id=CVE-2025-52357" target="_blank">CVE-2025-52357</a> - Reflected XSS in FiberHome FD602GW-DX-R410</p>
-    <p class="flicker">• <a href="https://www.cve.org/CVERecord?id=CVE-2025-56311" target="_blank">CVE-2025-56311</a> - CSRF Remote Reboot FiberHome FD602GW-DX-R410</p>
-    <hr class="flicker">
-
-    <h2 class="flicker">💻 Skills & Tools</h2>
-    <p class="flicker">
-      Java | React | Spring | Material UI | Flutter | Redux | HTML5 | CSS3 | JavaScript | NodeJS | MySQL | Firebase | AWS | Git
-    </p>
-    <hr class="flicker">
-
-    <h2 class="flicker">🔥 GitHub Stats</h2>
-    <p class="flicker">
-      <a href="https://github.com/hasanka-amarasinghe" target="_blank">GitHub Profile</a>
-    </p>
-    <hr class="flicker">
-
-    <h2 class="flicker">📝 Blog</h2>
-    <p class="flicker">
-      <a href="https://hasanka-amarasinghe.medium.com/" target="_blank">Medium Articles</a>
-    </p>
+  <div class="terminal" id="terminal">
+    <span class="flicker">[SYSTEM ONLINE]</span>
+    <br><span class="flicker">Initializing RudraForge Terminal v1.0...</span>
+    <br><span class="flicker">Loading CVEs and Security Research...</span>
+    <br>
+    <span class="flicker">• CVE-2025-52357 - <a href="https://www.cve.org/CVERecord?id=CVE-2025-52357" target="_blank">FiberHome FD602GW-DX-R410 XSS</a></span>
+    <br>
+    <span class="flicker">• CVE-2025-56311 - <a href="https://www.cve.org/CVERecord?id=CVE-2025-56311" target="_blank">FiberHome FD602GW-DX-R410 CSRF Remote Reboot</a></span>
+    <br><span class="flicker">Loading Tools & Languages...</span>
+    <br>
+    <span class="flicker">Java | React | Spring | Material UI | Flutter | Redux | HTML5 | CSS3 | JS | NodeJS | MySQL | Firebase | AWS | Git</span>
+    <br><span class="flicker">GitHub: <a href="https://github.com/hasanka-amarasinghe" target="_blank">hasanka-amarasinghe</a></span>
+    <br><span class="flicker">Blog: <a href="https://hasanka-amarasinghe.medium.com/" target="_blank">Medium Articles</a></span>
+    <br><span class="flicker">[SYSTEM READY]</span>
   </div>
 
 <script>
-  // Dynamic terminal print effect
-  const terminal = document.querySelector('.terminal');
+  // Dynamic print effect
+  const terminal = document.getElementById('terminal');
   const lines = Array.from(terminal.children);
   terminal.innerHTML = '';
-
+  
   function printLine(line, delay) {
     setTimeout(() => {
       terminal.appendChild(line);
