@@ -25,7 +25,7 @@ html{scroll-behavior:smooth;}
 body{background:var(--bg);font-family:'Share Tech Mono',monospace;color:var(--g);cursor:none;overflow-x:hidden;}
 
 /* CURSOR */
-#cursor{position:fixed;width:18px;height:18px;border:1px solid var(--g);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s,background .15s;box-shadow:0 0 8px var(--g);}
+#cursor{position:fixed;width:18px;height:18px;border:1px solid var(--g);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;box-shadow:0 0 8px var(--g);}
 #cursor-dot{position:fixed;width:4px;height:4px;background:var(--g);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
 body:has(a:hover) #cursor,body:has(button:hover) #cursor{width:34px;height:34px;background:rgba(0,255,65,.08);}
 
@@ -36,15 +36,23 @@ body:has(a:hover) #cursor,body:has(button:hover) #cursor{width:34px;height:34px;
 /* MATRIX */
 #matrix-canvas{position:fixed;inset:0;z-index:0;opacity:.12;}
 
-/* MASK */
-#mask-bg{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(52vh,52vw);pointer-events:none;z-index:1;animation:maskF 5s infinite;filter:drop-shadow(0 0 18px var(--g)) drop-shadow(0 0 50px rgba(0,255,65,.12));}
+/* REAL MASK IMAGE */
+#mask-bg{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:min(48vh,48vw);
+  pointer-events:none;z-index:1;
+  animation:maskF 5s infinite;
+  filter:drop-shadow(0 0 18px var(--g)) drop-shadow(0 0 50px rgba(0,255,65,.15)) invert(1) sepia(1) saturate(3) hue-rotate(90deg);
+}
 @keyframes maskF{
-  0%,100%{opacity:.10;}
-  7%{opacity:.05;filter:drop-shadow(0 0 4px var(--g));}
-  8%{opacity:.24;filter:drop-shadow(0 0 55px var(--g)) drop-shadow(0 0 100px rgba(0,255,65,.3));}
-  9%{opacity:.04;}10%{opacity:.14;}50%{opacity:.10;}
-  60%{opacity:.05;}61%{opacity:.28;filter:drop-shadow(0 0 70px var(--g));}
-  62%{opacity:.03;}63%{opacity:.12;}85%{opacity:.08;}86%{opacity:.18;}
+  0%,100%{opacity:.11;}
+  7%{opacity:.05;}
+  8%{opacity:.26;filter:drop-shadow(0 0 60px var(--g)) drop-shadow(0 0 120px rgba(0,255,65,.4)) invert(1) sepia(1) saturate(3) hue-rotate(90deg);}
+  9%{opacity:.04;}10%{opacity:.15;}50%{opacity:.11;}
+  60%{opacity:.05;}
+  61%{opacity:.30;filter:drop-shadow(0 0 70px var(--g)) invert(1) sepia(1) saturate(3) hue-rotate(90deg);}
+  62%{opacity:.03;}63%{opacity:.13;}85%{opacity:.08;}86%{opacity:.19;}
 }
 
 /* CRT */
@@ -59,13 +67,13 @@ body:has(a:hover) #cursor,body:has(button:hover) #cursor{width:34px;height:34px;
 nav{position:fixed;top:0;left:0;right:0;z-index:500;height:48px;background:rgba(0,4,1,.97);border-bottom:1px solid var(--gborder);display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;}
 .nav-logo{font-size:13px;font-weight:900;color:var(--g);text-shadow:0 0 14px var(--g);letter-spacing:5px;}
 .nav-logo span{color:var(--gmid);}
-.nav-links{display:flex;gap:24px;}
+.nav-links{display:flex;gap:22px;}
 .nav-links a{color:var(--gmid);text-decoration:none;letter-spacing:2px;transition:color .2s,text-shadow .2s;}
 .nav-links a:hover{color:var(--g);text-shadow:0 0 10px var(--g);}
 .nav-status{display:flex;align-items:center;gap:7px;color:var(--gmid);}
 .pulse-dot{width:7px;height:7px;background:var(--g);border-radius:50%;box-shadow:0 0 7px var(--g);animation:blink 1s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
-@media(max-width:600px){.nav-links{display:none;}}
+@media(max-width:640px){.nav-links{display:none;}}
 
 /* HERO */
 #hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px 24px 60px;text-align:center;position:relative;}
@@ -118,17 +126,38 @@ section{position:relative;z-index:10;padding:80px clamp(16px,6vw,100px);border-t
 .cve-row span{color:var(--text);}
 .cve-link{display:inline-block;margin-top:18px;font-size:10px;letter-spacing:2px;color:var(--red);text-decoration:none;border:1px solid rgba(255,34,68,.5);padding:7px 20px;transition:all .2s;font-family:'Orbitron',monospace;}
 .cve-link:hover{background:rgba(255,34,68,.1);box-shadow:0 0 20px rgba(255,34,68,.25);}
-.cve-alert{border:1px solid rgba(255,170,0,.4);background:rgba(18,12,0,.9);padding:18px 24px;margin-top:24px;font-size:12px;color:#ffcc44;line-height:2.1;}
+.cve-alert{border:1px solid rgba(255,170,0,.4);background:rgba(18,12,0,.9);padding:18px 24px;font-size:12px;color:#ffcc44;line-height:2.1;}
 .cve-alert strong{color:#ffeeaa;}
 
-/* STACK */
-.stack-cats{display:flex;flex-direction:column;gap:28px;}
-.stack-cat-label{font-size:9px;letter-spacing:3px;color:var(--gmid);margin-bottom:12px;font-family:'Orbitron',monospace;}
-.stack-items{display:flex;flex-wrap:wrap;gap:12px;}
-.sitem{border:1px solid var(--gborder);background:var(--panel);padding:10px 18px;font-size:12px;letter-spacing:1px;color:var(--gd);display:flex;align-items:center;gap:8px;transition:all .2s;cursor:default;}
-.sitem:hover{border-color:var(--g);color:var(--g);box-shadow:0 0 16px rgba(0,255,65,.18);transform:translateY(-2px);}
-.sitem img{width:20px;height:20px;filter:brightness(0) saturate(100%) invert(60%) sepia(80%) saturate(400%) hue-rotate(90deg);transition:filter .2s;}
-.sitem:hover img{filter:brightness(0) saturate(100%) invert(80%) sepia(100%) saturate(600%) hue-rotate(90deg) brightness(130%);}
+/* TOOLS */
+#tools{background:rgba(0,150,255,.012);}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:20px;}
+.tool-card{border:1px solid rgba(0,180,255,.35);background:rgba(0,8,20,.95);padding:28px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+.tool-card:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(0,180,255,.15);}
+.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);animation:scanH 3.5s infinite linear;}
+.tool-name{font-family:'Orbitron',monospace;font-size:clamp(14px,2vw,19px);font-weight:700;color:var(--blue);text-shadow:0 0 12px var(--blue);margin-bottom:6px;}
+.tool-type{display:inline-block;font-size:9px;letter-spacing:2px;border:1px solid rgba(0,180,255,.4);color:var(--blue);padding:2px 10px;margin-bottom:16px;font-family:'Orbitron',monospace;}
+.tool-row{font-size:12px;line-height:2.3;color:var(--gmid);}
+.tool-row span{color:var(--text);}
+
+/* SECURITY TOOLS ROW */
+.sec-tools-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;}
+.stag{border:1px solid rgba(255,34,68,.4);background:var(--panel);padding:8px 18px;font-size:12px;color:#ff7788;transition:all .2s;cursor:default;}
+.stag:hover{border-color:var(--red);box-shadow:0 0 14px rgba(255,34,68,.2);transform:translateY(-2px);}
+
+/* BUG BOUNTY */
+#bounty{background:rgba(255,170,0,.01);}
+.bounty-intro{font-size:12px;color:var(--gd);line-height:2.1;margin-bottom:32px;max-width:700px;}
+.bounty-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;}
+.bounty-card{border:1px solid rgba(255,170,0,.3);background:rgba(15,10,0,.95);padding:18px 20px;transition:all .25s;position:relative;overflow:hidden;}
+.bounty-card:hover{border-color:var(--amb);transform:translateY(-3px);box-shadow:0 6px 30px rgba(255,170,0,.12);}
+.bounty-card::after{content:'✓ SECURED';position:absolute;top:8px;right:8px;font-size:7px;letter-spacing:2px;color:var(--g);font-family:'Orbitron',monospace;}
+.bounty-name{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:#ffcc44;letter-spacing:1px;margin-bottom:4px;}
+.bounty-type{font-size:9px;color:var(--gdim);letter-spacing:1px;}
+/* Government cards get special styling */
+.bounty-card.gov{border-color:rgba(255,34,68,.35);}
+.bounty-card.gov .bounty-name{color:#ff9988;}
+.bounty-card.gov::after{color:#ff9988;}
 
 /* CONTACT */
 #contact{text-align:center;padding-bottom:60px;}
@@ -155,72 +184,12 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
 <!-- MATRIX -->
 <canvas id="matrix-canvas"></canvas>
 
-<!-- ══════════════════════════════════════════
-     GUY FAWKES / ANONYMOUS MASK
-     Proper features: arched brows, almond eyes,
-     rosy cheeks, curling mustache, pointed goatee
-══════════════════════════════════════════ -->
-<svg id="mask-bg" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
-  <!-- Face shape -->
-  <ellipse cx="150" cy="210" rx="115" ry="145" fill="#001205" stroke="#00ff41" stroke-width="1.3"/>
-  <!-- Forehead narrowing -->
-  <ellipse cx="150" cy="100" rx="78" ry="28" fill="#001205" stroke="none"/>
-
-  <!-- ═══ LEFT EYE ═══ -->
-  <!-- Outer socket -->
-  <ellipse cx="105" cy="175" rx="36" ry="24" fill="#000802" stroke="#00ff41" stroke-width="1.2"/>
-  <!-- Dark iris zone -->
-  <ellipse cx="105" cy="176" rx="28" ry="17" fill="#000200"/>
-  <!-- Iris ring -->
-  <ellipse cx="105" cy="175" rx="11" ry="12" fill="none" stroke="#00ff41" stroke-width="1"/>
-  <!-- Pupil -->
-  <ellipse cx="105" cy="175" rx="5.5" ry="6" fill="#001205"/>
-  <!-- Eye gleam -->
-  <ellipse cx="109" cy="171" rx="3" ry="2.2" fill="rgba(0,255,65,.55)"/>
-  <!-- High arched brow -->
-  <path d="M 72 154 Q 90 140 110 141 Q 128 142 138 150" fill="none" stroke="#00ff41" stroke-width="2.4" stroke-linecap="round"/>
-
-  <!-- ═══ RIGHT EYE ═══ -->
-  <ellipse cx="195" cy="175" rx="36" ry="24" fill="#000802" stroke="#00ff41" stroke-width="1.2"/>
-  <ellipse cx="195" cy="176" rx="28" ry="17" fill="#000200"/>
-  <ellipse cx="195" cy="175" rx="11" ry="12" fill="none" stroke="#00ff41" stroke-width="1"/>
-  <ellipse cx="195" cy="175" rx="5.5" ry="6" fill="#001205"/>
-  <ellipse cx="199" cy="171" rx="3" ry="2.2" fill="rgba(0,255,65,.55)"/>
-  <path d="M 162 150 Q 172 142 190 141 Q 210 140 228 154" fill="none" stroke="#00ff41" stroke-width="2.4" stroke-linecap="round"/>
-
-  <!-- ═══ NOSE ═══ -->
-  <path d="M 141 192 L 132 228 Q 150 238 168 228 L 159 192" fill="#000802" stroke="#00ff41" stroke-width="1"/>
-  <ellipse cx="135" cy="226" rx="8" ry="5" fill="#000200" stroke="#006018" stroke-width=".7"/>
-  <ellipse cx="165" cy="226" rx="8" ry="5" fill="#000200" stroke="#006018" stroke-width=".7"/>
-
-  <!-- ═══ ROSY CHEEKS (signature Anonymous feature) ═══ -->
-  <ellipse cx="68"  cy="222" rx="30" ry="22" fill="rgba(0,255,65,0.08)" stroke="#006018" stroke-width=".6"/>
-  <ellipse cx="232" cy="222" rx="30" ry="22" fill="rgba(0,255,65,0.08)" stroke="#006018" stroke-width=".6"/>
-
-  <!-- ═══ MOUTH / SMILE ═══ -->
-  <!-- Lip outline -->
-  <path d="M 107 258 Q 150 276 193 258 Q 189 299 150 309 Q 111 299 107 258 Z" fill="#000802" stroke="#00ff41" stroke-width="1.3"/>
-  <!-- The iconic upward-curving smile -->
-  <path d="M 107 258 Q 128 251 150 258 Q 172 251 193 258" fill="none" stroke="#00ff41" stroke-width="1.8"/>
-  <!-- Smile dimple creases -->
-  <path d="M 107 258 Q 101 250 107 242" fill="none" stroke="#006018" stroke-width=".9"/>
-  <path d="M 193 258 Q 199 250 193 242" fill="none" stroke="#006018" stroke-width=".9"/>
-
-  <!-- ═══ CURLING MUSTACHE (most iconic part) ═══ -->
-  <!-- Left mustache — sweeps out then curls up -->
-  <path d="M 150 250 Q 140 240 128 244 Q 118 247 115 255 Q 113 262 120 260 Q 127 258 128 251" fill="none" stroke="#00ff41" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Right mustache mirror -->
-  <path d="M 150 250 Q 160 240 172 244 Q 182 247 185 255 Q 187 262 180 260 Q 173 258 172 251" fill="none" stroke="#00ff41" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-
-  <!-- ═══ POINTED GOATEE ═══ -->
-  <path d="M 133 298 Q 150 326 167 298" fill="none" stroke="#00ff41" stroke-width="1.8" stroke-linecap="round"/>
-  <ellipse cx="150" cy="314" rx="10" ry="17" fill="#000802" stroke="#00ff41" stroke-width="1.1"/>
-
-  <!-- Face structure lines (cheekbone shadows) -->
-  <path d="M 42 248 Q 46 310 150 360 Q 254 310 258 248" fill="none" stroke="#003010" stroke-width=".7"/>
-  <path d="M 95 188 Q 82 210 86 240" fill="none" stroke="#004018" stroke-width=".6"/>
-  <path d="M 205 188 Q 218 210 214 240" fill="none" stroke="#004018" stroke-width=".6"/>
-</svg>
+<!-- REAL GUY FAWKES MASK — hidden via onerror if unavailable -->
+<img id="mask-bg"
+  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Vendetta_Mask_Guy_Fawkes_Illustration.png/400px-Vendetta_Mask_Guy_Fawkes_Illustration.png"
+  alt=""
+  onerror="this.style.display='none'"
+/>
 
 <!-- CRT -->
 <div id="crt"></div>
@@ -237,7 +206,8 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
   <div class="nav-links">
     <a href="#about">ABOUT</a>
     <a href="#cve">CVE</a>
-    <a href="#stack">STACK</a>
+    <a href="#tools">TOOLS</a>
+    <a href="#bounty">BOUNTIES</a>
     <a href="#contact">CONTACT</a>
   </div>
   <div class="nav-status">
@@ -255,7 +225,7 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
     <div class="htag red">PENETRATION TESTER</div>
     <div class="htag amb">BUG BOUNTY HUNTER</div>
     <div class="htag amb">RED TEAMER</div>
-    <div class="htag">FULL STACK DEV</div>
+    <div class="htag">TOOL DEVELOPER</div>
     <div class="htag">APPSEC ENGINEER</div>
     <div class="htag">CTF PLAYER</div>
     <div class="htag">🇱🇰 SRI LANKA</div>
@@ -277,20 +247,20 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
 <span class="kv-key">LOCATION  </span>: <span class="kv-str">"Sri Lanka 🇱🇰"</span>
 <span class="kv-key">CLEARANCE </span>: <span class="kv-val">FULL_ACCESS</span>
 <span class="kv-key">CVE_COUNT </span>: <span class="kv-num">2</span>
+<span class="kv-key">TOOLS_BUILT</span>: <span class="kv-num">4</span>
 <span class="kv-key">BLOG      </span>: <span class="kv-str">"Medium"</span>
 <span class="kv-key">ENCRYPTION</span>: <span class="kv-val">AES-256-GCM</span>
-<span class="kv-key">OPSEC     </span>: <span class="kv-val">ACTIVE</span>
 <span class="kv-key">STATUS    </span>: <span style="color:var(--g)">◉ ONLINE</span></pre>
     </div>
     <div class="about-panel">
       <div class="panel-label">// MISSION_LOG</div>
       <ul class="about-bio">
         <li>Application Security Engineer — securing web applications through Red Teaming &amp; offensive research</li>
-        <li>Contributing as a Bug Bounty Hunter — discovering real-world critical vulnerabilities</li>
+        <li>Contributing as a Bug Bounty Hunter — discovered vulnerabilities in <strong style="color:#ffcc44">global organisations</strong> including governments, automotive giants &amp; tech companies</li>
         <li>Credited with <strong style="color:var(--red)">2 CVEs</strong> in FiberHome router firmware</li>
-        <li>Writing cybersecurity &amp; tech research on <strong style="color:var(--g)">Medium</strong></li>
-        <li>Free time: Bug bounty programs, CTF hacking challenges &amp; tech articles</li>
-        <li>Full stack: Java · React · Spring · Flutter · Node.js · AWS</li>
+        <li>Built security tools used in real-world assessments</li>
+        <li>Writing cybersecurity &amp; research on <strong style="color:var(--g)">Medium</strong></li>
+        <li>Free time: Bug bounty programs, CTF challenges &amp; security research</li>
       </ul>
     </div>
   </div>
@@ -301,7 +271,7 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
   <div class="sec-header">// MODULE_02 — CRITICAL</div>
   <div class="sec-title">CVE REGISTRY</div>
   <div class="cve-alert reveal">
-    <strong>[!] RESPONSIBLE DISCLOSURE</strong> — The following CVEs were independently discovered and responsibly disclosed by <strong>hasanka-amarasinghe</strong>. Vendor: <strong>FiberHome Technologies</strong>. Model: <strong>FD602GW-DX-R410</strong>.
+    <strong>[!] RESPONSIBLE DISCLOSURE</strong> — Independently discovered and responsibly disclosed by <strong>hasanka-amarasinghe</strong>. Vendor: <strong>FiberHome Technologies</strong>. Model: <strong>FD602GW-DX-R410</strong>.
   </div>
   <div class="cve-grid" style="margin-top:24px">
     <div class="cve-card reveal">
@@ -327,57 +297,127 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
   </div>
 </section>
 
-<!-- STACK -->
-<section id="stack">
+<!-- TOOLS -->
+<section id="tools">
   <div class="sec-header">// MODULE_03</div>
-  <div class="sec-title">TECH STACK</div>
-  <div class="stack-cats reveal">
-    <div>
-      <div class="stack-cat-label">// LANGUAGES &amp; FRAMEWORKS</div>
-      <div class="stack-items">
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/java/java-original.svg?raw=true" onerror="this.style.display='none'"> Java</div>
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/javascript/javascript-original.svg?raw=true" onerror="this.style.display='none'"> JavaScript</div>
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/react/react-original.svg?raw=true" onerror="this.style.display='none'"> React</div>
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/spring/spring-original.svg?raw=true" onerror="this.style.display='none'"> Spring Boot</div>
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/flutter/flutter-original.svg?raw=true" onerror="this.style.display='none'"> Flutter</div>
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/nodejs/nodejs-original.svg?raw=true" onerror="this.style.display='none'"> Node.js</div>
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/redux/redux-original.svg?raw=true" onerror="this.style.display='none'"> Redux</div>
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/html5/html5-original.svg?raw=true" onerror="this.style.display='none'"> HTML5</div>
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/css3/css3-original.svg?raw=true" onerror="this.style.display='none'"> CSS3</div>
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/materialui/materialui-original.svg?raw=true" onerror="this.style.display='none'"> Material UI</div>
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/gatsby/gatsby-original.svg?raw=true" onerror="this.style.display='none'"> Gatsby</div>
-      </div>
+  <div class="sec-title">TOOLS_BUILT</div>
+
+  <div class="tools-grid reveal">
+
+    <div class="tool-card">
+      <div class="tool-name">RudraForge</div>
+      <div class="tool-type">● SECURITY FRAMEWORK</div>
+      <div class="tool-row">DESC   : <span>Personal security research &amp; tooling forge</span></div>
+      <div class="tool-row">DOMAIN : <span>Offensive Security / Research</span></div>
+      <div class="tool-row">LANG   : <span>Multi-stack</span></div>
+      <div class="tool-row">STATUS : <span style="color:var(--g)">ACTIVE ✓</span></div>
     </div>
-    <div>
-      <div class="stack-cat-label">// INFRASTRUCTURE &amp; DATA</div>
-      <div class="stack-items">
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/amazonwebservices/amazonwebservices-original.svg?raw=true" onerror="this.style.display='none'"> AWS</div>
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/firebase/firebase-plain.svg?raw=true" onerror="this.style.display='none'"> Firebase</div>
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/mysql/mysql-original.svg?raw=true" onerror="this.style.display='none'"> MySQL</div>
-        <div class="sitem"><img src="https://github.com/devicons/devicon/blob/master/icons/git/git-original.svg?raw=true" onerror="this.style.display='none'"> Git</div>
-      </div>
+
+    <div class="tool-card">
+      <div class="tool-name">Hayagriva</div>
+      <div class="tool-type">● SECURITY TOOL</div>
+      <div class="tool-row">DESC   : <span>Security automation &amp; assessment tool</span></div>
+      <div class="tool-row">DOMAIN : <span>Penetration Testing</span></div>
+      <div class="tool-row">STATUS : <span style="color:var(--g)">ACTIVE ✓</span></div>
     </div>
-    <div>
-      <div class="stack-cat-label">// OFFENSIVE SECURITY TOOLS</div>
-      <div class="stack-items">
-        <div class="sitem" style="border-color:rgba(255,34,68,.4);color:#ff7788">⚔ Burp Suite</div>
-        <div class="sitem" style="border-color:rgba(255,34,68,.4);color:#ff7788">⚔ OWASP ZAP</div>
-        <div class="sitem" style="border-color:rgba(255,34,68,.4);color:#ff7788">⚔ Nmap</div>
-        <div class="sitem" style="border-color:rgba(255,34,68,.4);color:#ff7788">⚔ Metasploit</div>
-        <div class="sitem" style="border-color:rgba(255,34,68,.4);color:#ff7788">⚔ Wireshark</div>
-        <div class="sitem" style="border-color:rgba(255,34,68,.4);color:#ff7788">⚔ Kali Linux</div>
-        <div class="sitem" style="border-color:rgba(255,34,68,.4);color:#ff7788">⚔ XSS Hunter</div>
-        <div class="sitem" style="border-color:rgba(255,34,68,.4);color:#ff7788">⚔ Shodan</div>
-      </div>
+
+    <div class="tool-card">
+      <div class="tool-name">BGP IP Scanner</div>
+      <div class="tool-type">● NETWORK RECON TOOL</div>
+      <div class="tool-row">DESC   : <span>Border Gateway Protocol &amp; IP range scanner for network reconnaissance</span></div>
+      <div class="tool-row">DOMAIN : <span>Network Security / Recon</span></div>
+      <div class="tool-row">VECTOR : <span>ASN lookup · CIDR sweep · BGP peer mapping</span></div>
+      <div class="tool-row">STATUS : <span style="color:var(--g)">ACTIVE ✓</span></div>
     </div>
+
+    <div class="tool-card">
+      <div class="tool-name">CheckHEADer</div>
+      <div class="tool-type">● WEB SECURITY SCANNER</div>
+      <div class="tool-row">DESC   : <span>HTTP security header analysis &amp; misconfiguration scanner</span></div>
+      <div class="tool-row">DOMAIN : <span>Web AppSec / Headers</span></div>
+      <div class="tool-row">CHECKS : <span>CSP · HSTS · X-Frame · CORS · Referrer-Policy</span></div>
+      <div class="tool-row">STATUS : <span style="color:var(--g)">ACTIVE ✓</span></div>
+    </div>
+
+  </div>
+
+  <div class="sec-header" style="margin-top:48px">// ARSENAL</div>
+  <div style="font-size:9px;letter-spacing:3px;color:var(--gmid);margin-bottom:16px;font-family:'Orbitron',monospace;">OFFENSIVE SECURITY TOOLS USED IN FIELD</div>
+  <div class="sec-tools-row reveal">
+    <div class="stag">⚔ Burp Suite</div>
+    <div class="stag">⚔ OWASP ZAP</div>
+    <div class="stag">⚔ Nmap</div>
+    <div class="stag">⚔ Metasploit</div>
+    <div class="stag">⚔ Wireshark</div>
+    <div class="stag">⚔ Kali Linux</div>
+    <div class="stag">⚔ XSS Hunter</div>
+    <div class="stag">⚔ Shodan</div>
+  </div>
+</section>
+
+<!-- BUG BOUNTY -->
+<section id="bounty">
+  <div class="sec-header">// MODULE_04</div>
+  <div class="sec-title">HALL_OF_FAME</div>
+  <p class="bounty-intro reveal">
+    Organisations whose security posture has been improved through responsible vulnerability disclosure. Each entry represents a confirmed finding acknowledged by the respective security team.
+  </p>
+
+  <div class="bounty-grid reveal">
+
+    <div class="bounty-card">
+      <div class="bounty-name">OpenAI</div>
+      <div class="bounty-type">AI / TECH GIANT</div>
+    </div>
+
+    <div class="bounty-card">
+      <div class="bounty-name">GoPro</div>
+      <div class="bounty-type">CONSUMER TECH</div>
+    </div>
+
+    <div class="bounty-card">
+      <div class="bounty-name">Toyota</div>
+      <div class="bounty-type">AUTOMOTIVE</div>
+    </div>
+
+    <div class="bounty-card">
+      <div class="bounty-name">Mercedes-Benz</div>
+      <div class="bounty-type">AUTOMOTIVE</div>
+    </div>
+
+    <div class="bounty-card">
+      <div class="bounty-name">BMW Group</div>
+      <div class="bounty-type">AUTOMOTIVE</div>
+    </div>
+
+    <div class="bounty-card gov">
+      <div class="bounty-name">French Government</div>
+      <div class="bounty-type">GOVERNMENT / NATIONAL</div>
+    </div>
+
+    <div class="bounty-card gov">
+      <div class="bounty-name">US Government</div>
+      <div class="bounty-type">GOVERNMENT / FEDERAL</div>
+    </div>
+
+    <div class="bounty-card">
+      <div class="bounty-name">Sophos</div>
+      <div class="bounty-type">CYBERSECURITY VENDOR</div>
+    </div>
+
+    <div class="bounty-card" style="border-color:rgba(0,255,65,.2);background:rgba(0,10,3,.8);">
+      <div class="bounty-name" style="color:var(--gmid)">+ More</div>
+      <div class="bounty-type">ONGOING RESEARCH</div>
+    </div>
+
   </div>
 </section>
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="sec-header">// MODULE_04</div>
+  <div class="sec-header">// MODULE_05</div>
   <div class="sec-title">ESTABLISH_CONNECTION</div>
-  <p class="contact-desc reveal">Security researcher · Full stack developer · Open to collaboration on bug bounty &amp; appsec research.</p>
+  <p class="contact-desc reveal">Security researcher · AppSec Engineer · Open to collaboration on bug bounty &amp; security research.</p>
   <div class="link-grid reveal">
     <a class="contact-link" href="https://github.com/hasanka-amarasinghe" target="_blank"><span class="icon">⌥</span> GITHUB</a>
     <a class="contact-link" href="https://hasanka-amarasinghe.medium.com/" target="_blank"><span class="icon">✍</span> MEDIUM</a>
@@ -389,7 +429,7 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
 
 <footer>
   <div class="anon-footer">░░░ WE ARE ANONYMOUS · WE ARE LEGION · WE DO NOT FORGIVE · WE DO NOT FORGET · EXPECT US ░░░</div>
-  <div>© HASANKA-AMARASINGHE · RUDRAFORGE · <span id="footer-year"></span></div>
+  <div>© HASANKA-AMARASINGHE · WRATHFULDIETY · <span id="footer-year"></span></div>
 </footer>
 </div>
 
@@ -444,12 +484,13 @@ const bootLines=[
   {t:'[AUTH] CLEARANCE: FULL_ACCESS GRANTED',d:960},
   {t:'[AUTH] LOCATION: Sri Lanka // OBFUSCATED',d:1060},
   {t:'',d:1160},
-  {t:'[CVE_DB] QUERYING NVD ...',d:1240},
-  {t:'[CVE_DB] CVE-2025-52357 ... LOADED',d:1360},
-  {t:'[CVE_DB] CVE-2025-56311 ... LOADED',d:1480},
-  {t:'',d:1580},
-  {t:'[SYSTEM] ALL MODULES INITIALIZED',d:1660},
-  {t:'[SYSTEM] LAUNCHING INTERFACE ...',d:1780},
+  {t:'[CVE_DB] CVE-2025-52357 ... LOADED',d:1280},
+  {t:'[CVE_DB] CVE-2025-56311 ... LOADED',d:1400},
+  {t:'[TOOLS] CheckHEADer, BGP Scanner ... READY',d:1520},
+  {t:'[BOUNTY] Hall of Fame entries ... LOADED',d:1640},
+  {t:'',d:1740},
+  {t:'[SYSTEM] ALL MODULES INITIALIZED',d:1820},
+  {t:'[SYSTEM] LAUNCHING INTERFACE ...',d:1940},
 ];
 const bootEl=document.getElementById('boot-text'),bootDiv=document.getElementById('boot');
 bootLines.forEach(({t,d})=>{
@@ -459,19 +500,20 @@ bootLines.forEach(({t,d})=>{
     if(t.includes('CVE'))ln.style.color='#ff7788';
     else if(t.includes('AUTH'))ln.style.color='#ffcc44';
     else if(t.includes('SYSTEM'))ln.style.color='#00ff41';
+    else if(t.includes('TOOLS')||t.includes('BOUNTY'))ln.style.color='#88ddff';
     else ln.style.color='#00dd38';
     bootEl.appendChild(ln);
   },d);
 });
-setTimeout(()=>bootDiv.classList.add('fade'),2400);
-setTimeout(()=>bootDiv.style.display='none',3100);
+setTimeout(()=>bootDiv.classList.add('fade'),2500);
+setTimeout(()=>bootDiv.style.display='none',3200);
 
 /* HERO TYPEWRITER */
 const heroLines=[
   '> Application Security Engineer',
   '> Red Teamer & Bug Bounty Hunter',
-  '> 2× CVE Published Researcher',
-  '> Full Stack: Java · React · Flutter · AWS',
+  '> 2× CVE Published · 4× Tools Built',
+  '> Secured: OpenAI · Toyota · BMW · US Gov · ...',
   '> [STATUS: HUNTING] — Expect Me.',
 ];
 const hEl=document.getElementById('hero-terminal');
@@ -487,22 +529,24 @@ function typeNext(){
     if(ci>=line.length){clearInterval(iv);setTimeout(typeNext,320);}
   },26);
 }
-setTimeout(typeNext,2900);
+setTimeout(typeNext,3000);
 
 /* MASK GLITCH */
 const mask=document.getElementById('mask-bg');
-setInterval(()=>{
-  if(Math.random()>.58){
-    const dx=(Math.random()-.5)*12,dy=(Math.random()-.5)*7;
-    mask.style.transform=`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) skewX(${(Math.random()-.5)*2.5}deg)`;
-    setTimeout(()=>mask.style.transform='translate(-50%,-50%)',45+Math.random()*100);
-  }
-},380);
+if(mask){
+  setInterval(()=>{
+    if(Math.random()>.58){
+      const dx=(Math.random()-.5)*12,dy=(Math.random()-.5)*7;
+      mask.style.transform=`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) skewX(${(Math.random()-.5)*2.5}deg)`;
+      setTimeout(()=>mask.style.transform='translate(-50%,-50%)',45+Math.random()*100);
+    }
+  },380);
+}
 
 /* SCROLL REVEAL */
 const obs=new IntersectionObserver(es=>es.forEach(e=>{
   if(e.isIntersecting)e.target.classList.add('visible');
-}),{threshold:0.1});
+}),{threshold:0.08});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
 </body>
