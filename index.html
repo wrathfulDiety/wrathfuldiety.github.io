@@ -9,10 +9,10 @@
 <style>
 :root {
   --g:      #00ff41;
-  --gd:     #00dd38;
-  --gmid:   #00bb2a;
-  --gdim:   #008820;
-  --gborder:#005518;
+  --gd:     #00e83b;
+  --gmid:   #2bea60;
+  --gdim:   #1fce49;
+  --gborder:#0a7a28;
   --bg:     #000500;
   --amb:    #ffaa00;
   --red:    #ff2244;
@@ -159,6 +159,9 @@ section{position:relative;z-index:10;padding:80px clamp(16px,6vw,100px);border-t
 .tool-type{display:inline-block;font-size:9px;letter-spacing:2px;border:1px solid rgba(0,180,255,.4);color:var(--blue);padding:2px 10px;margin-bottom:16px;font-family:'Orbitron',monospace;}
 .tool-row{font-size:12px;line-height:2.3;color:var(--gmid);}
 .tool-row span{color:var(--text);}
+.tool-link{display:inline-block;margin-top:14px;font-size:10px;letter-spacing:2px;color:var(--blue);text-decoration:none;border:1px solid rgba(0,180,255,.5);padding:7px 20px;transition:all .2s;font-family:'Orbitron',monospace;}
+.tool-link:hover{background:rgba(0,180,255,.1);box-shadow:0 0 20px rgba(0,180,255,.25);}
+.tool-soon{display:inline-block;margin-top:14px;font-size:10px;letter-spacing:2px;color:var(--amb);border:1px solid rgba(255,170,0,.5);padding:7px 20px;font-family:'Orbitron',monospace;opacity:.85;}
 
 /* SECURITY TOOLS ROW */
 .sec-tools-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;}
@@ -414,15 +417,17 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
       <div class="tool-row">DESC   : <span>Personal security research &amp; tooling forge</span></div>
       <div class="tool-row">DOMAIN : <span>Offensive Security / Research</span></div>
       <div class="tool-row">LANG   : <span>Multi-stack</span></div>
-      <div class="tool-row">STATUS : <span style="color:var(--g)">ACTIVE ✓</span></div>
+      <div class="tool-row">STATUS : <span style="color:var(--amb)">IN DEVELOPMENT</span></div>
+      <span class="tool-soon">◇ COMING SOON</span>
     </div>
 
     <div class="tool-card">
       <div class="tool-name">Hayagriva</div>
       <div class="tool-type">● SECURITY TOOL</div>
-      <div class="tool-row">DESC   : <span>Security automation &amp; assessment tool</span></div>
-      <div class="tool-row">DOMAIN : <span>Penetration Testing</span></div>
+      <div class="tool-row">DESC   : <span>bgp.he.net subnet scraper for network reconnaissance</span></div>
+      <div class="tool-row">DOMAIN : <span>Network Security / Recon</span></div>
       <div class="tool-row">STATUS : <span style="color:var(--g)">ACTIVE ✓</span></div>
+      <a class="tool-link" href="https://github.com/wrathfuldiety/Hayagriva" target="_blank" rel="noopener">▸ VIEW REPO</a>
     </div>
 
     <div class="tool-card">
@@ -432,6 +437,7 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
       <div class="tool-row">DOMAIN : <span>Network Security / Recon</span></div>
       <div class="tool-row">VECTOR : <span>ASN lookup · CIDR sweep · BGP peer mapping</span></div>
       <div class="tool-row">STATUS : <span style="color:var(--g)">ACTIVE ✓</span></div>
+      <a class="tool-link" href="https://github.com/wrathfuldiety/Hayagriva" target="_blank" rel="noopener">▸ VIEW REPO</a>
     </div>
 
     <div class="tool-card">
@@ -441,6 +447,7 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
       <div class="tool-row">DOMAIN : <span>Web AppSec / Headers</span></div>
       <div class="tool-row">CHECKS : <span>CSP · HSTS · X-Frame · CORS · Referrer-Policy</span></div>
       <div class="tool-row">STATUS : <span style="color:var(--g)">ACTIVE ✓</span></div>
+      <a class="tool-link" href="https://wrathfuldiety.github.io/checkheader/" target="_blank" rel="noopener">▸ LAUNCH TOOL</a>
     </div>
 
   </div>
@@ -523,7 +530,7 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
   <div class="sec-title">ESTABLISH_CONNECTION</div>
   <p class="contact-desc reveal">Security researcher · AppSec Engineer · Open to collaboration on bug bounty &amp; security research.</p>
   <div class="link-grid reveal">
-    <a class="contact-link" href="https://github.com/hasanka-amarasinghe" target="_blank"><span class="icon">⌥</span> GITHUB</a>
+    <a class="contact-link" href="https://github.com/wrathfuldiety" target="_blank" rel="noopener"><span class="icon">⌥</span> GITHUB</a>
     <a class="contact-link" href="https://hasanka-amarasinghe.medium.com/" target="_blank"><span class="icon">✍</span> MEDIUM</a>
     <a class="contact-link" href="https://linkedin.com/in/hasanka-amarasinghe" target="_blank"><span class="icon">◈</span> LINKEDIN</a>
     <a class="contact-link" href="https://www.cve.org/CVERecord?id=CVE-2025-52357" target="_blank" style="border-color:rgba(255,34,68,.5);color:#ff7788"><span class="icon">⚠</span> CVE-2025-52357</a>
