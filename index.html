@@ -352,7 +352,7 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
 <span class="kv-key">SIDE_OPS  </span>: <span class="kv-str">"Red Teamer"</span>
 <span class="kv-key">LOCATION  </span>: <span class="kv-str">"Sri Lanka 🇱🇰"</span>
 <span class="kv-key">CLEARANCE </span>: <span class="kv-val">FULL_ACCESS</span>
-<span class="kv-key">CVE_COUNT </span>: <span class="kv-num">2</span>
+<span class="kv-key">CVE_COUNT </span>: <span class="kv-num">4</span>
 <span class="kv-key">TOOLS_BUILT</span>: <span class="kv-num">4</span>
 <span class="kv-key">BLOG      </span>: <span class="kv-str">"Medium"</span>
 <span class="kv-key">ENCRYPTION</span>: <span class="kv-val">AES-256-GCM</span>
@@ -363,7 +363,7 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
       <ul class="about-bio">
         <li>Application Security Engineer — securing web applications through Red Teaming &amp; offensive research</li>
         <li>Contributing as a Bug Bounty Hunter — discovered vulnerabilities in <strong style="color:#ffcc44">global organisations</strong> including governments, automotive giants &amp; tech companies</li>
-        <li>Credited with <strong style="color:var(--red)">2 CVEs</strong> in FiberHome router firmware</li>
+        <li>Credited with <strong style="color:var(--red)">4 CVEs</strong> — FiberHome router firmware &amp; Intel/Altera SoCFPGA secure-boot firmware (EL3 / TrustZone)</li>
         <li>Built security tools used in real-world assessments</li>
         <li>Writing cybersecurity &amp; research on <strong style="color:var(--g)">Medium</strong></li>
         <li>Free time: Bug bounty programs, CTF challenges &amp; security research</li>
@@ -377,7 +377,7 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
   <div class="sec-header">// MODULE_02 — CRITICAL</div>
   <div class="sec-title">CVE REGISTRY</div>
   <div class="cve-alert reveal">
-    <strong>[!] RESPONSIBLE DISCLOSURE</strong> — Independently discovered and responsibly disclosed by <strong>hasanka-amarasinghe</strong>. Vendor: <strong>FiberHome Technologies</strong>. Model: <strong>FD602GW-DX-R410</strong>.
+    <strong>[!] RESPONSIBLE DISCLOSURE</strong> — Independently discovered and responsibly disclosed by <strong>hasanka-amarasinghe</strong>. Vendors: <strong>FiberHome Technologies</strong> (FD602GW-DX-R410) &amp; <strong>Intel/Altera</strong> (SoCFPGA ARM Trusted Firmware).
   </div>
   <div class="cve-grid" style="margin-top:24px">
     <div class="cve-card reveal">
@@ -399,6 +399,26 @@ footer{border-top:1px solid var(--gborder);padding:28px 40px;display:flex;flex-d
       <div class="cve-row">IMPACT : <span>Remote Device Reboot · Service Disruption</span></div>
       <div class="cve-row">STATUS : <span style="color:var(--g)">PUBLISHED ✓</span></div>
       <a class="cve-link" href="https://www.cve.org/CVERecord?id=CVE-2025-56311" target="_blank">▸ VIEW CVE RECORD</a>
+    </div>
+    <div class="cve-card reveal">
+      <div class="cve-id">CVE-2026-58004</div>
+      <div class="cve-severity">● SEVERITY: HIGH</div>
+      <div class="cve-row">TYPE   : <span>Stack-Based Buffer Overflow (Secure Boot)</span></div>
+      <div class="cve-row">TARGET : <span>Intel/Altera SoCFPGA ARM Trusted Firmware · Stratix 10 / Agilex</span></div>
+      <div class="cve-row">VECTOR : <span>Crafted Firmware Image · VAB Authentication Path</span></div>
+      <div class="cve-row">IMPACT : <span>Arbitrary Code Execution at EL3 (Secure Monitor)</span></div>
+      <div class="cve-row">STATUS : <span style="color:var(--amb)">ASSIGNED · RESERVED</span></div>
+      <a class="cve-link" href="https://www.cve.org/CVERecord?id=CVE-2026-58004" target="_blank">▸ VIEW CVE RECORD</a>
+    </div>
+    <div class="cve-card reveal">
+      <div class="cve-id">CVE-2026-58005</div>
+      <div class="cve-severity">● SEVERITY: HIGH</div>
+      <div class="cve-row">TYPE   : <span>Missing Address-Range Validation (SMC Handler)</span></div>
+      <div class="cve-row">TARGET : <span>Intel/Altera SoCFPGA ATF · SiP v2 Mailbox Handler</span></div>
+      <div class="cve-row">VECTOR : <span>Non-Secure EL1 · SiP SMC Call</span></div>
+      <div class="cve-row">IMPACT : <span>EL1 → EL3 Arbitrary Physical Read/Write · TrustZone Bypass</span></div>
+      <div class="cve-row">STATUS : <span style="color:var(--amb)">ASSIGNED · RESERVED</span></div>
+      <a class="cve-link" href="https://www.cve.org/CVERecord?id=CVE-2026-58005" target="_blank">▸ VIEW CVE RECORD</a>
     </div>
   </div>
 </section>
@@ -586,9 +606,11 @@ const bootLines=[
   {t:'[AUTH] LOCATION: Sri Lanka // OBFUSCATED',d:1060},
   {t:'',d:1160},
   {t:'[CVE_DB] CVE-2025-52357 ... LOADED',d:1280},
-  {t:'[CVE_DB] CVE-2025-56311 ... LOADED',d:1400},
-  {t:'[TOOLS] CheckHEADer, Hayagriva ... READY',d:1520},
-  {t:'[BOUNTY] Hall of Fame entries ... LOADED',d:1640},
+  {t:'[CVE_DB] CVE-2025-56311 ... LOADED',d:1360},
+  {t:'[CVE_DB] CVE-2026-58004 ... LOADED',d:1440},
+  {t:'[CVE_DB] CVE-2026-58005 ... LOADED',d:1520},
+  {t:'[TOOLS] CheckHEADer, Hayagriva ... READY',d:1600},
+  {t:'[BOUNTY] Hall of Fame entries ... LOADED',d:1680},
   {t:'',d:1740},
   {t:'[SYSTEM] ALL MODULES INITIALIZED',d:1820},
   {t:'[SYSTEM] LAUNCHING INTERFACE ...',d:1940},
@@ -613,7 +635,7 @@ setTimeout(()=>bootDiv.style.display='none',3200);
 const heroLines=[
   '> Application Security Engineer',
   '> Red Teamer & Bug Bounty Hunter',
-  '> 2× CVE Published · 4× Tools Built',
+  '> 4× CVE (2 Published · 2 Assigned) · Tools Built',
   '> Secured: OpenAI · Toyota · BMW · US Gov · ...',
   '> [STATUS: HUNTING] — Expect Me.',
 ];
